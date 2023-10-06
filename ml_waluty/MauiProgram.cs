@@ -18,6 +18,10 @@ namespace ml_waluty
 #if DEBUG
 		builder.Logging.AddDebug();
 #endif
+            Task.Run(async () =>
+            {
+                currency_handler.grabRates();
+            });
 
             return builder.Build();
         }

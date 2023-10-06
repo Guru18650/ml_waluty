@@ -1,10 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="ml_waluty.MainPage">
+             x:Class="ml_waluty.MainPage"
+             Title="Kantor">
 
-    <StackLayout>
-        <Label x:Name="l"/>
+    <StackLayout Padding="20">
+        <Label Text="Waluta bazowa"></Label>
+        <Picker x:Name="fromPicker" ItemDisplayBinding="{Binding currency}" SelectedIndexChanged="refresh"></Picker>
+        <Label Text="Waluta" Margin="0,20,0,0"></Label>
+        <Picker x:Name="toPicker" ItemDisplayBinding="{Binding currency}" SelectedIndexChanged="refresh"></Picker>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Button Text="Zamień" x:Name="exBtn" Clicked="exBtn_Clicked" Grid.Column="0" Margin="5"/>
+            <Entry Placeholder="Kwota" x:Name="kwota" Keyboard="Numeric" Grid.Column="1" Margin="5" TextChanged="refresh"/>
+        </Grid>
+        <Entry IsEnabled="False" Placeholder="Wynik" x:Name="wynik"></Entry>
     </StackLayout>
 
 </ContentPage>

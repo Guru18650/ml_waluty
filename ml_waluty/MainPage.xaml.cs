@@ -7,18 +7,38 @@
         public MainPage()
         {
             InitializeComponent();
+            fromPicker.ItemsSource = currency_handler.rates;
+            fromPicker.SelectedIndex = 0;
+            toPicker.ItemsSource = currency_handler.rates;
+            toPicker.SelectedIndex = 1;
         }
 
-        private void OnCounterClicked(object sender, EventArgs e)
+        private void exBtn_Clicked(object sender, EventArgs e)
         {
-            count++;
+            int temp = fromPicker.SelectedIndex;
+            fromPicker.SelectedIndex = toPicker.SelectedIndex;
+            toPicker.SelectedIndex = temp;
+        }
 
-            if (count == 1)
-                CounterBtn.Text = $"Clicked {count} time";
-            else
-                CounterBtn.Text = $"Clicked {count} times";
+        private void refresh(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(kwota.Text) || kwota.Text == "-" || kwota.Text == ".")
+            {
+                kwota.Text = "";
+                return;
+            }
+            double kwotaa = double.Parse(kwota.Text);
+            if (kwotaa < 0)
+            {
+                wynik.Text = "Podaj poprawne wartości";
+                return;
+            }
+            currencyClass from = fromPicker.SelectedItem as currencyClass;
+            currencyClass to = toPicker.SelectedItem as currencyClass;
 
-            SemanticScreenReader.Announce(CounterBtn.Text);
+            double wynikint = Math.Round(kwotaa * from.bid / to.ask,2);
+            wynik.Text = wynikint.ToString();
+
         }
     }
 }

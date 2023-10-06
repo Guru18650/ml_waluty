@@ -5,6 +5,8 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
 namespace ml_waluty
 {
     public static class currency_handler
@@ -12,18 +14,37 @@ namespace ml_waluty
         private static readonly HttpClient client = new HttpClient();
         private static readonly string bankUrl = "https://api.nbp.pl/api/exchangerates/tables/C/";
 
-        public static async Task<List<currencyClass>> getCurrencies(){
+        public static List<currencyClass> rates = new List<currencyClass>();
+
+        public static async Task grabRates()
+        {
             var response = await client.GetStringAsync(bankUrl);
-            var r = JsonConvert.DeserializeObject<List<currencyClass>>(response);
-            return r;
+            List<responseclass> r = JsonConvert.DeserializeObject<List<responseclass>>(response);
+            rates = r[0].rates;
+            rates.Insert(0,new currencyClass()
+            {
+                currency = "złotówka",
+                code = "PLN",
+                bid = 1,
+                ask = 1
+            });
         }
     }
 
     public class currencyClass
     {
-        string currency { get; set; }
-        string code { get; set; }
-        double bid { get; set; }
-        double ask { get; set; }
+        public string currency { get; set; }
+        public string code { get; set; }
+        public double bid { get; set; }
+        public double ask { get; set; }
     }
+
+    public class responseclass {
+        public string table { get; set; }
+        public string no { get; set; }
+        public string tradingDate { get; set; }
+        public string effectiveDate { get; set; }
+        public List<currencyClass> rates { get; set; }
+}
+
 }
